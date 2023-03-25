@@ -1,0 +1,121 @@
+.modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(32, 32, 32, 0.7);
+}
+.modal-wrapper {
+    position: absolute;
+    margin: 5vh 5%;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: scroll;
+    background-color: rgb(255,80,0);
+    border: 5px solid black;
+    border-radius: 10px;
+    
+}
+.modal-wrapper::-webkit-scrollbar {
+    display: none;
+}
+.button-close-modal {
+    margin: 1vh 5%;
+    width: 90%;
+    height: 50px;
+    font-weight: 800;
+    font-size: 1.5rem;
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 5px;
+}
+.modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(32, 32, 32, 0.7);
+}
+.modal-wrapper {
+    position: absolute;
+    margin: 5vh 5%;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: scroll;
+    background-color: rgb(255, 230, 220);
+    border: 5px solid rgb(255, 80, 0);
+    border-radius: 10px;
+    
+}
+.modal-wrapper::-webkit-scrollbar {
+    display: none;
+}
+.button-close-modal {
+    margin: 1vh 5%;
+    width: 90%;
+    height: 50px;
+    font-weight: 800;
+    font-size: 1.5rem;
+    background-color: white;
+    border: 3px solid rgb(255, 80, 0);
+    border-radius: 5px;
+    cursor: pointer;
+}
+.button-close-modal:hover {
+  background-color: rgb(255, 80, 0);
+  color: white;
+  transition: all 0.2s;
+}
+
+.coupon-tab {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.coupon-column {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    height: 35px;
+    border-bottom: 1px solid rgb(255, 80, 0);
+}
+.coupon-head{
+    height: 40px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    border-bottom: 2px solid rgb(255, 80, 0);
+    border-top: 2px solid rgb(255, 80, 0);
+}
+.coupon-content .coupon-copy {
+    cursor: pointer;
+}
+.coupon-content .coupon-copy:hover {
+    background-color: rgb(255, 80, 0);
+}
+.coupon-slpit {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-use-select: text;
+    user-select: text;
+}
+.coupon-code {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-use-select: text;
+    user-select: text;
+}
+.status-message {
+    font-size: 1.5rem;
+    margin: 10px;
+    font-weight: 800;
+    word-break: keep-all;
+}
+.coupon-slpit {
+    font-weight: 600;
+}
+.coupon-slpiter {
+    margin: 0 5px;
+}
