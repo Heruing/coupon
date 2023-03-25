@@ -10,12 +10,13 @@
             <input v-model="inputPhonenumber" id="inputPhonenumber" type="text" maxlength="11" placeholder="숫자만 입력하세요." v-on:input="checkInput" @keypress.enter="requestCoupon">
             <div class="input-label" style="margin-top:10px">쿠폰종류</div>
             <select v-model="selectedType">
-                <option disabled value="">선택</option>
+                <option class="select-option" disabled value="" style="text-align: center;">- - - 선택하세요 - - -</option>
                 <option
+                    class="select-option"
                     v-for="(item, index) in selectList"
                     :key="index"
-                    :value="item.value"
-                    >{{ item.name }}</option
+                    :value="item.coupon_type"
+                    >{{ item.coupon_name }}</option
                 >
             </select>
             <div class="button-wrapper">
@@ -54,17 +55,15 @@
 </template>
 
 <script>
+import { inject } from "vue";
+
 export default {
     data () {
         return {
             inputUsername: "",
             inputPhonenumber: "",
             selectedType: "",
-            selectList:[
-                { name: "만우절", value: "event20230401" },
-                { name: "신학기", value: "event20230301" },
-                { name: "설날", value: "event20230122" },
-            ],
+            selectList: "",
             getMessage: "",
             getCode: "",
             isOpenModal:false,
@@ -73,32 +72,38 @@ export default {
     },
     methods: {
         requestCoupon() {
-            const userdata = {
-                userName: this.inputUsername,
-                phoneNumber : this.inputPhonenumber,
-                couponType : this.selectedType,
-            };
-            this.axios.post("http://localhost:3000/api", userdata)
-                .then((res) => {
-                    if (res.data.type === "approve") {
-                        this.getMessage = "쿠폰번호가 발급되었습니다.";
-                        this.isModalTable = true;
-                    } else if (res.data.type === "inapprove") {
-                        this.getMessage = "해당 쿠폰에 대한 발급이력이 이미 있습니다.";
-                        this.isModalTable = true;
-                    } else if (res.data.type === "duplicated") {
-                        this.getMessage = "정보가 불일치합니다."
-                        this.isModalTable = false;
-                    } else if (res.data.type === "error") {
-                        alert(this.getCode = res.data.message);
-                        return;
-                    }
-                    this.getCode = res.data.message;
-                    this.isOpenModal = true;
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
+            if (this.inputUsername && this.inputPhonenumber && this.selectedType){
+                if (this.inputPhonenumber.length < 10) {
+                    alert('휴대전화 번호가 너무 짧습니다.');
+                    return;
+                }
+                const userdata = {
+                    userName: this.inputUsername,
+                    phoneNumber : this.inputPhonenumber,
+                    couponType : this.selectedType,
+                };
+                this.axios.post("http://localhost:3000/api", userdata)
+                    .then((res) => {
+                        if (res.data.type === "approve") {
+                            this.getMessage = "쿠폰번호가 발급되었습니다.";
+                            this.isModalTable = true;
+                        } else if (res.data.type === "inapprove") {
+                            this.getMessage = "해당 쿠폰에 대한 발급이력이 이미 있습니다.";
+                            this.isModalTable = true;
+                        } else if (res.data.type === "duplicated") {
+                            this.getMessage = "정보가 불일치합니다."
+                            this.isModalTable = false;
+                        } else if (res.data.type === "error") {
+                            alert(this.getCode = res.data.message);
+                            return;
+                        }
+                        this.getCode = res.data.message;
+                        this.isOpenModal = true;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            }
         },
         checkInput() {
             const str = this.inputPhonenumber;
@@ -117,10 +122,7 @@ export default {
             element.select();
             document.execCommand('copy');
             document.body.removeChild(element);
-        }
-
-
-
+        },
         // requestCoupon() {
         //     // node-express 기본 포트인 3000번 포트로 요청합니다.
         //     if (this.inputUsername && this.inputPhonenumber && this.selectedType){
@@ -153,6 +155,9 @@ export default {
         //     }
         // },
     },
+    beforeMount() {
+        this.selectList = inject("couponTypes");
+    }
 }
 
 </script>

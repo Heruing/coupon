@@ -1,3 +1,13 @@
+function getAvailableCoupon(connection) {
+    let query = "SELECT coupon_type, coupon_name FROM types WHERE start_at <= NOW() AND NOW() <= end_at"
+    return new Promise((resolve, reject) => {
+        connection.query(query, (err, results, fields) => {
+            if (err) reject(err);
+            resolve(results);
+        })
+    })
+}
+
 function getUserInfo(connection, getType, name, phonenumber) {
     const query = "SELECT * FROM users WHERE phonenumber = ?"
     const param = [phonenumber];
@@ -9,8 +19,8 @@ function getUserInfo(connection, getType, name, phonenumber) {
             if (result.length === 0) {
                 if (getType === "create") {
                     const newUser = { name: name, phonenumber: phonenumber };
-                    connection.query("INSERT INTO users SET ?", newUser, (error, results, fields) => {
-                        if (error) reject(error);
+                    connection.query("INSERT INTO users SET ?", newUser, (err, results, fields) => {
+                        if (err) reject(err);
                         resolve(results.insertId);
                     });
                 }
@@ -47,8 +57,8 @@ function getCoupon(connection, userid, couponType) {
                     connection.query(checkQuery, [couponCode], (err, results, fields) => { flag = results.length; });
                 }
                 const newCoupon = { userid: userid, coupon_code: couponCode, coupon_type: couponType};
-                connection.query("INSERT INTO coupons SET ?", newCoupon, (error, results, fields) => {
-                    if (error) reject(error);
+                connection.query("INSERT INTO coupons SET ?", newCoupon, (err, results, fields) => {
+                    if (err) reject(err);
                     console.log(`${userid}번 유저에게 ${couponType} 쿠폰을 발급합니다.`)
                     resolve({type:"approve", message:couponCode});
                 });
@@ -75,6 +85,10 @@ function getHistory(connection, userid) {
 }
 
 
+
+
+
+exports.getAvailableCoupon = getAvailableCoupon;
 exports.getUserInfo = getUserInfo;
 exports.getCoupon = getCoupon;
 exports.getHistory = getHistory;

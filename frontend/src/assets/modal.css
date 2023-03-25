@@ -45,9 +45,8 @@
     max-height: 90vh;
     overflow-y: scroll;
     background-color: rgb(255, 230, 220);
-    border: 5px solid rgb(255, 80, 0);
+    border: 5px solid rgb(255, 150, 0);
     border-radius: 10px;
-    
 }
 .modal-wrapper::-webkit-scrollbar {
     display: none;
