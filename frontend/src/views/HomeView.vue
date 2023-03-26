@@ -11,9 +11,10 @@
             <div class="input-label" style="margin-top:10px">쿠폰종류</div>
             <div class="selectBox" @click="isSelectOpen=!isSelectOpen">
                 <span v-if="selectedType ">{{ selectedName }}</span>
-                <span v-if="!selectedType ">- - - 선택해주세요 - - -</span>
+                <span v-if="!selectedType ">선택해주세요</span>
                 
             </div>
+            
             <div v-show="isSelectOpen" class="select-option-wrapper">
                     <div
                         class="select-option"
@@ -29,11 +30,13 @@
             </div>
         </div>
     </div>
-    <div v-show="isOpenModal" class="modal-background" id="modal-wrapper-background" >
-        <div class="modal-outer">
-            <div class="modal-wrapper">
+    <div v-show="isOpenModal" class="modal-background" id="modal-wrapper-background" @onclick="isModalTable=false">
+    </div>
+    <div class="modal-outer">
+        <transition name="modalLeft" appear>
+            <div v-show="isOpenModal"  class="modal-wrapper">
                 <div class="modal" id="modal-request">
-                    <div class="status-message">{{ getMessage }}</div>
+                    <div class="status-header"><h1>{{ statusHeader }}</h1></div>
                     <span v-if="isModalTable" v-show="isModalTable">
                         <div class="coupon-tab coupon-header">
                             <span class="coupon-column coupon-head coupon-code">쿠폰 번호</span>
@@ -46,18 +49,20 @@
                                     {{ getCode.slice((idx-1) * 4, (idx) * 4) }}
                                 </span>
                             </span>
-                            <span class="coupon-column coupon-content coupon-copy" @click="copyClipboard()">클릭</span>
+                            <span class="coupon-column coupon-content coupon-copy" @click="copyClipboard()">●</span>
                         </div>
                     </span>
-                    <span v-show="!isModalTable" style="margin-left: 10px;">
+                    <span v-show="!isModalTable" class="status-message">
                         {{ getCode }}
                     </span>
                     <button class="button-close-modal" @click="isOpenModal=false">닫기</button>
                 </div>
             </div>
-        </div>
+        </transition>
     </div>
 </template>
+
+
 
 <script>
 import { inject } from "vue";
@@ -70,7 +75,7 @@ export default {
             selectedName: "",
             selectedType: "",
             selectList: "",
-            getMessage: "",
+            statusHeader: "",
             getCode: "",
             isOpenModal:false,
             isModalTable: false,
@@ -81,7 +86,9 @@ export default {
         requestCoupon() {
             if (this.inputUsername && this.inputPhonenumber && this.selectedType){
                 if (this.inputPhonenumber.length < 10) {
-                    alert('휴대전화 번호가 너무 짧습니다.');
+                    this.statusHeader = "오류"
+                    this.getCode = "휴대전화 번호가 너무 짧습니다.";
+                    this.isModalTable = false;
                     return;
                 }
                 const userdata = {
@@ -92,27 +99,31 @@ export default {
                 this.axios.post("http://localhost:3000/api", userdata)
                     .then((res) => {
                         if (res.data.type === "approve") {
-                            this.getMessage = "쿠폰 번호가 발급되었습니다.";
+                            this.statusHeader = "신규 쿠폰 번호";
                             this.isModalTable = true;
                         } else if (res.data.type === "inapprove") {
-                            this.getMessage = "이전에 발급한 쿠폰 번호입니다.";
+                            this.statusHeader = "기존 쿠폰 기록";
                             this.isModalTable = true;
                         } else if (res.data.type === "duplicated") {
-                            this.getMessage = "정보가 불일치합니다."
+                            this.statusHeader = "오류"
                             this.isModalTable = false;
                         } else if (res.data.type === "error") {
-                            alert(this.getCode = res.data.message);
-                            return;
+                            this.statusHeader = "오류"
+                            this.isModalTable = false;
                         }
                         this.getCode = res.data.message;
-                        this.isOpenModal = true;
                     })
                     .catch((err) => {
                         console.log(err);
+                        return;
                     })
-            } else {
-                alert('모든 값을 입력해주세요.');
-            }
+                } else {
+                    this.statusHeader = "오류"
+                    this.getCode = "모든 값을 입력해주세요.";
+                    this.isModalTable = false;
+                }
+            this.isModalTable = false;
+            this.isOpenModal = true;
         },
         checkInput() {
             const str = this.inputPhonenumber;
@@ -137,41 +148,13 @@ export default {
             this.selectedName = name;
             this.isSelectOpen = false;
         }
-
-        // requestCoupon() {
-        //     // node-express 기본 포트인 3000번 포트로 요청합니다.
-        //     if (this.inputUsername && this.inputPhonenumber && this.selectedType){
-        //         let phonenum = this.inputPhonenumber;
-        //         if (phonenum.toString().length < 10) {
-        //             alert('휴대전화 번호가 너무 짧습니다.');
-        //             return;
-        //         }
-        //         const userdata = {
-        //             userName: this.inputUsername,
-        //             phoneNumber : this.inputPhonenumber,
-        //             couponType : this.selectedType,
-        //         };
-        //         this.axios.post("http://localhost:3000/api", userdata)
-        //             .then((res) => {
-        //                 if (res.data.type === "approve") {
-        //                     this.getCode = res.data.message;
-        //                     // 4자리씩 표현해주기
-        //                     // this.codeWithDelimiter = "";
-        //                     // let temp = res.data.split();
-        //                 } else {
-        //                     alert(this.getCode = res.data.message);
-        //                 }
-        //             })
-        //             .catch((err) => {
-        //                 console.log(err);
-        //             })
-        //     } else {
-        //         alert('모든 값을 입력해주세요!');
-        //     }
-        // },
     },
     beforeMount() {
         this.selectList = inject("couponAvailables");
+    },
+    mounted() {
+        document.body.style.transform = "rotateY(1deg)";
+        document.body.style.backgroundImage = "url('https://newsroom.smilegate.com/s3/multi/gunslinger_3840x2160.jpg')";
     }
 }
 

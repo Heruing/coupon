@@ -47,28 +47,39 @@ app.get("/api/", (req, res) => {
 
 // 쿠폰 발급 요청 시
 app.post("/api/", (req, res) => {
-    if (req.body.userName && req.body.phoneNumber && req.body.couponType) {
-        dbQuery.getUserInfo(connection, "create", req.body.userName, req.body.phoneNumber)
-            .then((userid) => {
-                if (userid === -1) {
-                    console.log("이미 사용된 번호로 시도하였습니다.")
-                    res.send({type:"duplicated", message:"이미 사용된 번호입니다."});
-                } else {
-                    console.log(`${userid} 유저가 쿠폰 발급을 요청했습니다.`);
-                    dbQuery.getCoupon(connection, userid, req.body.couponType)
-                        .then((result) => {
-                            res.send(result);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            res.send({type: "error", message: "서버에 문제가 발생했습니다."});
-                        })
-                }
-            }).catch((err) => {
-                res.send({type: "error", message: "서버에 문제가 발생했습니다."});
-            })
+    if (req.body.userName && 10 <= req.body.phoneNumber.length && req.body.couponType) {
+        let flag = 0;
+        for (let i=0; i < couponAvailables.length; i++){
+            if (couponAvailables[i].coupon_type === req.body.couponType) {
+                flag = 1;
+                break;
+            }
+        }
+        if (flag) {
+            dbQuery.getUserInfo(connection, "create", req.body.userName, req.body.phoneNumber)
+                .then((userid) => {
+                    if (userid === -1) {
+                        console.log("이미 사용된 번호로 시도하였습니다.")
+                        res.send({type:"duplicated", message:"이미 사용된 번호입니다."});
+                    } else {
+                        console.log(`${userid}번 유저가 쿠폰 발급을 요청했습니다.`);
+                        dbQuery.getCoupon(connection, userid, req.body.couponType)
+                            .then((result) => {
+                                res.send(result);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                res.send({type: "error", message: "서버에 문제가 발생했습니다."});
+                            })
+                    }
+                }).catch((err) => {
+                    return res.send({type: "error", message: "서버에 문제가 발생했습니다."});
+                })
+        } else {
+            return res.send({type: "error", message: "해당 쿠폰이 존재하지 않습니다."});
+        }
     } else {
-        res.send({type: "error", message: "비정상적인 접근입니다."});
+        return res.send({type: "error", message: "비정상적인 접근입니다."});
     }
 })
 

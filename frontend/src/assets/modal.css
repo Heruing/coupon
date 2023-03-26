@@ -1,48 +1,33 @@
+@font-face {
+    font-family: 'EliceDigitalBaeum_Bold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_220508@1.0/EliceDigitalBaeum_Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
 .modal-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 500%;
+    height: 500%;
     background-color: rgba(32, 32, 32, 0.7);
+}
+.modal-outer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 30vh;
+    perspective: 700px;
+    transform-style: preserve-3d;
 }
 .modal-wrapper {
     box-sizing: border-box;
-    position: absolute;
-    top: 25vh;
-    margin: 0 5%;
     width: 90%;
-    max-height: 40vh;
-    background-color: rgb(255,80,0);
-    border: 5px solid black;
-    border-radius: 10px;
-}
-.modal-wrapper::-webkit-scrollbar {
-    display: none;
-}
-.button-close-modal {
-    margin: 1vh 5%;
-    width: 90%;
-    height: 50px;
-    font-weight: 800;
-    font-size: 1.5rem;
-    background-color: white;
-    border: 3px solid black;
-    border-radius: 5px;
-}
-.modal-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(32, 32, 32, 0.7);
-}
-.modal-wrapper {
-    position: absolute;
-    margin: 0 5%;
-    width: 90%;
-    max-height: 90vh;
+    max-width: 800px;
+    max-height: 60vh;
     overflow-y: scroll;
     background-color: rgb(255, 230, 220);
     border: 5px solid rgb(255, 150, 0);
@@ -74,6 +59,7 @@
     width: 100%;
 }
 .coupon-column {
+    white-space:nowrap;
     display:flex;
     align-items: center;
     justify-content: center;
@@ -95,8 +81,18 @@
 .modal-content-wrapper::-webkit-scrollbar{
     display: none;
 }
+@keyframes blink {
+    0% { color: rgb(255, 0, 0)}
+    20% { color: rgb(255, 255, 0)}
+    40% { color: rgb(0, 255, 0)}
+    60% { color: rgb(0, 255, 255)}
+    80% { color: rgb(0, 0, 255)}
+    100% { color: rgb(255, 0, 255)}
+}
 .coupon-content .coupon-copy {
     cursor: pointer;
+    font-weight: 800;
+    animation: blink 5s alternate linear infinite;
 }
 .coupon-content .coupon-copy:hover {
     background-color: rgb(255, 80, 0);
@@ -124,8 +120,46 @@
     word-break: keep-all;
 }
 .coupon-slpit {
-    font-weight: 600;
+    font-family: 'EliceDigitalBaeum_Bold';
 }
 .coupon-slpiter {
     margin: 0 5px;
+}
+@media (max-width: 320px) {
+    .coupon-slpiter {
+        display: none;
+    }
+}
+
+.modalLeft-enter-from {
+    transform: rotateY(90deg);
+}
+.modalLeft-enter-to {
+    transform: rotateY(0deg);
+}
+.modalLeft-enter-active {
+    transition: all 0.2s;
+}
+.modalLeft-leave-to {
+    opacity: 0;
+}
+.modalLeft-leave-active {
+    transition: all 0.2s;
+}
+
+
+.modalRight-enter-from {
+    transform: rotateY(-90deg);
+}
+.modalRight-enter-to {
+    transform: rotateY(0deg);
+}
+.modalRight-enter-active {
+    transition: all 0.2s;
+}
+.modalRight-leave-to {
+    opacity: 0;
+}
+.modalRight-leave-active {
+    transition: all 0.2s;
 }
