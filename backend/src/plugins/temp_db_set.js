@@ -7,6 +7,9 @@ function setTempDB(connection) {
             result = results;
             if (result.length === 0) {
                 const coupons = [
+                    { coupon_type: "newyear2022", coupon_name: "신년맞이", start_at: "2022-01-01 00:00:00", end_at: "2022-02-28 23:59:59" },
+                    { coupon_type: "expired", coupon_name: "만료쿠폰1", start_at: "2022-01-01 00:00:00", end_at: "2022-12-31 23:59:59" },
+                    { coupon_type: "expired2", coupon_name: "만료쿠폰2", start_at: "2022-01-01 00:00:00", end_at: "2022-12-31 23:59:59" },
                     { coupon_type: "newyear2023", coupon_name: "신년맞이", start_at: "2023-01-22 00:00:00", end_at: "2023-04-07 23:59:59" },
                     { coupon_type: "newsemester2023-1", coupon_name: "신학기 이벤트", start_at: "2023-03-01 00:00:00", end_at: "2023-04-07 23:59:59" },
                     { coupon_type: "aprilPool2023", coupon_name: "만우절", start_at: "2023-03-25 00:00:00", end_at: "2023-04-07 23:59:59" },

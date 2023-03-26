@@ -1,9 +1,19 @@
-function getAvailableCoupon(connection) {
+function getTypes(connection) {
+    let query = "SELECT coupon_type, coupon_name FROM types"
+    return new Promise((resolve, reject) => {
+        connection.query(query, (err, results, fields) => {
+            if (err) reject(err);
+            resolve(results.reverse());
+        })
+    })
+}
+
+function getAvailables(connection) {
     let query = "SELECT coupon_type, coupon_name FROM types WHERE start_at <= NOW() AND NOW() <= end_at"
     return new Promise((resolve, reject) => {
         connection.query(query, (err, results, fields) => {
             if (err) reject(err);
-            resolve(results);
+            resolve(results.reverse());
         })
     })
 }
@@ -12,23 +22,29 @@ function getUserInfo(connection, getType, name, phonenumber) {
     const query = "SELECT * FROM users WHERE phonenumber = ?"
     const param = [phonenumber];
     return new Promise((resolve, reject) => {
-        let result;
         connection.query(query, param, (err, results, fields) => {
             if (err) reject(err);
-            result = results;
-            if (result.length === 0) {
+            if (results.length === 0) {
                 if (getType === "create") {
-                    const newUser = { name: name, phonenumber: phonenumber };
-                    connection.query("INSERT INTO users SET ?", newUser, (err, results, fields) => {
-                        if (err) reject(err);
-                        resolve(results.insertId);
-                    });
-                }
+                    createUser(connection, name, phonenumber)
+                        .then(res=> {resolve(res)})
+                        .catch(err => {reject(err)})
+                } else resolve(-1);
             } else {
-                if (result[0].name == name) resolve(result[0].userid);
+                if (results[0].name === name) resolve(results[0].userid);
+                else resolve(-1);
             }
-            resolve(-1);
         })
+    })
+}
+
+function createUser(connection, name, phonenumber) {
+    return new Promise((resolve, reject) => {
+        const newUser = { name: name, phonenumber: phonenumber };
+        connection.query("INSERT INTO users SET ?", newUser, (err, results, fields) => {
+            if (err) reject(err);
+            resolve(results.insertId);
+        });
     })
 }
 
@@ -88,7 +104,8 @@ function getHistory(connection, userid) {
 
 
 
-exports.getAvailableCoupon = getAvailableCoupon;
+exports.getTypes = getTypes;
+exports.getAvailables = getAvailables;
 exports.getUserInfo = getUserInfo;
 exports.getCoupon = getCoupon;
 exports.getHistory = getHistory;

@@ -7,15 +7,15 @@
     background-color: rgba(32, 32, 32, 0.7);
 }
 .modal-wrapper {
+    box-sizing: border-box;
     position: absolute;
-    margin: 5vh 5%;
+    top: 25vh;
+    margin: 0 5%;
     width: 90%;
-    max-height: 90vh;
-    overflow-y: scroll;
+    max-height: 40vh;
     background-color: rgb(255,80,0);
     border: 5px solid black;
     border-radius: 10px;
-    
 }
 .modal-wrapper::-webkit-scrollbar {
     display: none;
@@ -40,7 +40,7 @@
 }
 .modal-wrapper {
     position: absolute;
-    margin: 5vh 5%;
+    margin: 0 5%;
     width: 90%;
     max-height: 90vh;
     overflow-y: scroll;
@@ -88,6 +88,13 @@
     border-bottom: 2px solid rgb(255, 80, 0);
     border-top: 2px solid rgb(255, 80, 0);
 }
+.modal-content-wrapper {
+    max-height:15vh;
+    overflow-y: scroll;
+}
+.modal-content-wrapper::-webkit-scrollbar{
+    display: none;
+}
 .coupon-content .coupon-copy {
     cursor: pointer;
 }
@@ -105,6 +112,10 @@
     -moz-user-select: text;
     -ms-use-select: text;
     user-select: text;
+}
+.status-header h1{
+    margin: 10px;
+    word-break: keep-all;
 }
 .status-message {
     font-size: 1.5rem;

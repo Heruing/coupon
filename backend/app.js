@@ -30,26 +30,25 @@ dbSet.setConnection(connection);
 tempDBset.setTempDB(connection);
 
 // 현재 사용 가능한 쿠폰 세팅
-let couponInfos;
-dbQuery.getAvailableCoupon(connection)
-    .then(result => {
-        couponInfos = result;
-    })
-    .catch(err => {
-        console.log(err);
-    })
+let couponTypes, couponAvailables;
+dbQuery.getTypes(connection)
+    .then(res => {couponTypes = res})
+    .catch(err => {console.log(err)})
+dbQuery.getAvailables(connection)
+    .then(res => {couponAvailables = res})
+    .catch(err => {console.log(err)})
 
 
 // 쿠폰 정보 요청
 app.get("/api/", (req, res) => {
-    res.send(couponInfos);
+    res.send({couponTypes: couponTypes, couponAvailables: couponAvailables});
 })
 
 
 // 쿠폰 발급 요청 시
 app.post("/api/", (req, res) => {
     if (req.body.userName && req.body.phoneNumber && req.body.couponType) {
-        dbQuery.getUserInfo(connection, "create",req.body.userName, req.body.phoneNumber)
+        dbQuery.getUserInfo(connection, "create", req.body.userName, req.body.phoneNumber)
             .then((userid) => {
                 if (userid === -1) {
                     console.log("이미 사용된 번호로 시도하였습니다.")

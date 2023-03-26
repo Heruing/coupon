@@ -11,10 +11,9 @@ axios.get("http://localhost:3000/api")
 .then((res) => {
     const app = createApp(App)
         app.config.globalProperties.axios = axios; //app.provide('$axios', axios);
-        app.provide("couponTypes", res.data);
+        app.provide("couponAvailables", res.data.couponAvailables);
+        app.provide("couponTypes", res.data.couponTypes);
         app.use(router)
         app.mount('#app')
     })
-    .catch((err) => {
-        alert("서버에 문제가 발생하였습니다.");
-    })
+    .catch((err) => {alert("서버에 문제가 발생하였습니다.")})
