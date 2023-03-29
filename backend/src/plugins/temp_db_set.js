@@ -1,3 +1,4 @@
+/** Set database with temporary data. */
 function setTempDB(connection) {
     return new Promise((resolve, reject) => {
         const query = "SELECT * FROM types"

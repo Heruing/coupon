@@ -1,4 +1,5 @@
 const express = require("express");
+const cron = require("node-cron");
 const app = express();
 const port = 3000;
 const dbSet = require("./src/plugins/db_set.js");
@@ -31,12 +32,17 @@ tempDBset.setTempDB(connection);
 
 // 현재 사용 가능한 쿠폰 세팅
 let couponTypes, couponAvailables;
-dbQuery.getTypes(connection)
-    .then(res => {couponTypes = res})
-    .catch(err => {console.log(err)})
-dbQuery.getAvailables(connection)
-    .then(res => {couponAvailables = res})
-    .catch(err => {console.log(err)})
+function hourJob() {
+    dbQuery.getTypes(connection)
+        .then(res => {couponTypes = res})
+        .catch(err => {console.log(err)})
+    dbQuery.getAvailables(connection)
+        .then(res => {couponAvailables = res})
+        .catch(err => {console.log(err)})
+    console.log("Update Coupon informations")
+}
+hourJob();
+cron.schedule("0 0 * * * *", hourJob);  // 매 시간마다 쿠폰 정보 업데이트
 
 
 // 쿠폰 정보 요청

@@ -1,3 +1,8 @@
+/**
+ * Check  all coupon types.
+ * @param {object} connection - MySQL database connection object.
+ * @returns {Promise} Promise object represents the results of the SQL query.
+ */
 function getTypes(connection) {
     let query = "SELECT coupon_type, coupon_name FROM types"
     return new Promise((resolve, reject) => {
@@ -8,6 +13,11 @@ function getTypes(connection) {
     })
 }
 
+/**
+ * Check coupon types now available.
+ * @param {object} connection - MySQL database connection object.
+ * @returns {Promise} Promise object represents the results of the SQL query.
+ */
 function getAvailables(connection) {
     let query = "SELECT coupon_type, coupon_name FROM types WHERE start_at <= NOW() AND NOW() <= end_at"
     return new Promise((resolve, reject) => {
@@ -18,14 +28,23 @@ function getAvailables(connection) {
     })
 }
 
-function getUserInfo(connection, getType, name, phonenumber) {
+/**
+ * Get user info from MYSQL. If user not exist, "create" type makes new user,
+ * "read" type return status that hs no user(-1)
+ * @param {object} connection - MySQL database connection object.
+ * @param {string} reqType - Declare request type, "create" or "read".
+ * @param {string} name - Request user's name.
+ * @param {string} phonenumber - Request user's phene number.
+ * @returns {Promise} Promise object represents user's primary key.
+ */
+function getUserInfo(connection, reqType, name, phonenumber) {
     const query = "SELECT * FROM users WHERE phonenumber = ?"
     const param = [phonenumber];
     return new Promise((resolve, reject) => {
         connection.query(query, param, (err, results, fields) => {
             if (err) reject(err);
             if (results.length === 0) {
-                if (getType === "create") {
+                if (reqType === "create") {
                     createUser(connection, name, phonenumber)
                         .then(res=> {resolve(res)})
                         .catch(err => {reject(err)})
@@ -38,6 +57,13 @@ function getUserInfo(connection, getType, name, phonenumber) {
     })
 }
 
+/**
+ * Insert new user information to MYSQL and return new user's index number.
+ * @param {object} connection - MySQL database connection object.
+ * @param {string} name - Request user's name.
+ * @param {string} phonenumber - Request user's phene number.
+ * @returns {Promise} Promise object represents user's primary key.
+ */
 function createUser(connection, name, phonenumber) {
     return new Promise((resolve, reject) => {
         const newUser = { name: name, phonenumber: phonenumber };
@@ -48,6 +74,11 @@ function createUser(connection, name, phonenumber) {
     })
 }
 
+/**
+ * Make coupon code randomly with uppercase alphabets and numbers.
+ * @param {int} n - Set how long coupon codes.
+ * @returns {string} Return coupon code that has input length.
+ */
 function makeCoupon(n) {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let couponCode = "";
@@ -57,6 +88,12 @@ function makeCoupon(n) {
     return couponCode;
 }
 
+/**
+ * Check coupon code in or not in MYSQL.
+ * @param {object} connection - MySQL database connection object.
+ * @param {string} couponCode - Return from function makeCoupon.
+ * @returns {Promise} Number of couponCode in MYSQL 
+ */
 function checkCoupon(connection, couponCode) {
     return new Promise((resolve, reject) => {
         const query = "SELECT * FROM coupons WHERE coupon_code = ?"
@@ -66,7 +103,14 @@ function checkCoupon(connection, couponCode) {
         });
     })
 }
-
+/**
+ * Insert coupon information to MYSQL.
+ * @param {object} connection - MySQL database connection object.
+ * @param {string} userid - Return from function getUserInfo.
+ * @param {string} couponCode - Return from function makeCoupon.
+ * @param {string} couponType - User requested coupon type.
+ * @returns {Promise} Return MYSQL query request result.
+ */
 function insertCoupon(connection, userid, couponCode, couponType) {
     return new Promise((resolve, reject) => {
         const newCoupon = { userid: userid, coupon_code: couponCode, coupon_type: couponType };
@@ -77,6 +121,14 @@ function insertCoupon(connection, userid, couponCode, couponType) {
     })
 }
 
+/**
+ * When user request coupon, then this function check all validations and return message.
+ * @param {object} connection - MySQL database connection object.
+ * @param {string} userid - Return from function getUserInfo.
+ * @param {string} couponType - User requested coupon type.
+ * @param {int} n - Coupon length.
+ * @returns {Promise} Response to user coupon request
+ */
 function getCoupon(connection, userid, couponType, n=0) {
     return new Promise((resolve, reject) => {
         const query = "SELECT * FROM coupons WHERE userid = ? and coupon_type = ?"
@@ -111,6 +163,12 @@ function getCoupon(connection, userid, couponType, n=0) {
     })
 }
 
+/**
+ * Search MYSQL DB from userid.
+ * @param {object} connection - MySQL database connection object.
+ * @param {string} userid - Return from function getUserInfo.
+ * @returns {Promise} Promise object represents response to user coupon history request
+ */
 function getHistory(connection, userid) {
     return new Promise((resolve, reject) => {
         console.log(`${userid}번 유저의 발급 내역 요청입니다.`)
