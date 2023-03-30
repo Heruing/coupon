@@ -1,14 +1,26 @@
-# frontend
+# Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+```python
+📂 frontend
+│
+├─ 📁 public
+├─ 📂 src
+│   ├─ 📂 assets
+│	│   ├─ 📄 base.css		# 공용 요소CSS 관리
+│	│   ├─ 📄 main.css		# css import
+│	│   └─ 📄 modal.css		# 모달 CSS
+│	├─ 📁 components
+│   ├─ 📂 router
+│	│   └─ 📄 index.js		# router 관리
+│   ├─ 📂 views
+│   ├─ 📄 app.vue
+│   └─ 📄 main.js			# 서버에서 coupon정보 받고 app mount
+├─ 📄 .gitignore
+├─ 📄 index.html
+├─ 📄 package.json
+├─ 📄 README.md
+└─ 📄 vite.config.js		# 프록시 설정
+```
 
 ## Project Setup
 

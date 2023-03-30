@@ -138,7 +138,6 @@ export default {
 </script>
 
 <style scoped>
-@import '/src/assets/modal.css';
 @media (min-width:600px) {
     .coupon-index {
         width: 8%;

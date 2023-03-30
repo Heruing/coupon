@@ -158,7 +158,6 @@ export default {
 
 
 <style scoped>
-@import '/src/assets/modal.css';
 .button-wrapper {
     margin-top: 10px;
 }
