@@ -12,7 +12,6 @@
             <div class="selectBox" @click="isSelectOpen=!isSelectOpen">
                 <span v-if="selectedType ">{{ selectedName }}</span>
                 <span v-if="!selectedType ">선택해주세요</span>
-                
             </div>
             
             <div v-show="isSelectOpen" class="select-option-wrapper">
@@ -30,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div v-show="isOpenModal" class="modal-background" id="modal-wrapper-background" @onclick="isModalTable=false">
+    <div v-show="isOpenModal" class="modal-background" id="modal-wrapper-background" @click="isOpenModal=false">
     </div>
     <div class="modal-outer">
         <transition name="modalLeft" appear>
@@ -99,15 +98,12 @@ export default {
                 this.axios.post("http://localhost:3000/api", userdata)
                     .then((res) => {
                         if (res.data.type === "approve") {
-                            this.statusHeader = "신규 쿠폰 번호";
+                            this.statusHeader = "쿠폰이 발급되었습니다.";
                             this.isModalTable = true;
                         } else if (res.data.type === "inapprove") {
-                            this.statusHeader = "기존 쿠폰 기록";
+                            this.statusHeader = "이미 받은 쿠폰입니다.";
                             this.isModalTable = true;
-                        } else if (res.data.type === "duplicated") {
-                            this.statusHeader = "오류"
-                            this.isModalTable = false;
-                        } else if (res.data.type === "error") {
+                        } else {
                             this.statusHeader = "오류"
                             this.isModalTable = false;
                         }
@@ -154,7 +150,7 @@ export default {
     },
     mounted() {
         document.body.style.transform = "rotateY(1deg)";
-        document.body.style.backgroundImage = "url('https://newsroom.smilegate.com/s3/multi/gunslinger_3840x2160.jpg')";
+        document.body.style.backgroundImage = "url('https://d2x8kymwjom7h7.cloudfront.net/live/application_no/96001/default/COMMUNITY/10281f50220846e9a21feef67fae6ac8/4c0dc883ef174ff2a053dea06432803f.png')";
     }
 }
 

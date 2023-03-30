@@ -7,8 +7,10 @@
 
 body {
     margin: 5vh 5vw;
-    height: 90vh;
     width: 90vw;
+    min-width: 260px;
+    height: 90vh;
+    min-height: 595px;
     transition: 0.5s;
     background-color: black;
     background-size: cover;
@@ -17,12 +19,19 @@ body {
 }
 html {
     width: 100vw;
+    min-width: 275px;
     height: 100vh;
-    overflow: hidden;
+    min-height: 630px;
+    overflow-x: hidden;
+    overflow-y: scroll;
     perspective: 700px;
-    background: url("https://newsroom.smilegate.com/s3/multi/%EB%B2%A0%EB%A5%B8%EB%82%A8%EB%B6%80_%EB%A1%9C%EA%B7%B8%EC%9D%B8%ED%99%94%EB%A9%B4.jpg");
+    background: url("https://d3kxs6kpbh59hp.cloudfront.net/community/COMMUNITY/f0b0f777ef914f12be1f5e34fd109849/9413663435e1440496652e1bbe0a6253_1607594997.png");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: cover;
+}
+html::-webkit-scrollbar {
+    display: none;
 }
 
 #app {
@@ -84,16 +93,18 @@ input:focus {
     border: 2px solid rgb(255, 150, 0);
 }
 .select-option {
+    box-sizing: border-box;
     padding:2px;
     height: 50px;
     font-size: 1.2rem;
     line-height: 50px;
     transition: 0.2s;
+    border-bottom: 1px solid rgba(255, 80, 0, 0.3);
 }
 .select-option:hover {
-    background-color: rgb(255, 80, 0);
     font-weight: 800;
-    background-color: rgba(255, 255, 255, 0.95);
+    font-size: 1.3rem;
+    background-color: rgba(255, 80, 0, 0.3);
 }
 
 
@@ -144,5 +155,6 @@ button:hover {
     font-weight: 800;
     font-size: 1.2rem;
     color: rgb(255, 255, 255);
+    text-shadow: -1px 0 rgb(255, 80, 0), 0 1px rgb(255, 80, 0), 1px 0 rgb(255, 80, 0), 0 -1px rgb(255, 80, 0);
 }
 

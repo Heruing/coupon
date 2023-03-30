@@ -7,10 +7,10 @@
 
 .modal-background {
     position: absolute;
-    top: -100%;
-    left: -100%;
-    width: 500%;
-    height: 500%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: rgba(32, 32, 32, 0.7);
 }
 .modal-outer {
@@ -135,7 +135,7 @@
     transform: rotateY(90deg);
 }
 .modalLeft-enter-to {
-    transform: rotateY(0deg);
+    transform: rotateY(-1deg);
 }
 .modalLeft-enter-active {
     transition: all 0.2s;
@@ -152,7 +152,7 @@
     transform: rotateY(-90deg);
 }
 .modalRight-enter-to {
-    transform: rotateY(0deg);
+    transform: rotateY(1deg);
 }
 .modalRight-enter-active {
     transition: all 0.2s;

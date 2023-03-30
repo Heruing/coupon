@@ -14,7 +14,7 @@
         </div>
     </div>
     
-    <div v-show="openHistoryModal" class="modal-background" id="modal-history-wrapper-background" @onclick="isModalTable=false">
+    <div v-show="openHistoryModal" class="modal-background" id="modal-history-wrapper-background" @click="openHistoryModal=false">
     </div>
     <div class="modal-outer">
         <transition name="modalRight">
@@ -129,7 +129,7 @@ export default {
     },
     mounted() {
         document.body.style.transform = "rotateY(-1deg)";
-        document.body.style.backgroundImage = "url('https://newsroom.smilegate.com/s3/multi/destroyer_3840x2160.jpg')";
+        document.body.style.backgroundImage = "url('https://d3kxs6kpbh59hp.cloudfront.net/community/COMMUNITY/c277786c150245ba85476eb8463b2f63/9d603c832d494ce8949740ec203fae5e_1564980750.jpg')";
         for (let i=0; i < inject("couponTypes").length; i++) {
             this.couponTypes[inject("couponTypes")[i].coupon_type] = inject("couponTypes")[i]["coupon_name"];
         }
